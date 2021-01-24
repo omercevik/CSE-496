@@ -1,5 +1,6 @@
 import csv
 import pandas as pd
+from sklearn.metrics import classification_report
 
 
 class TrackAnalysis:
@@ -11,7 +12,7 @@ class TrackAnalysis:
         self.__filePath = "/home/omer/Desktop/driver_eye_tracking/gtu/cse496/features/"
         self.__directorySize = 13
         self.__sleepSituationSize = 3
-        self.getAllData()
+        # self.getAllData()
         self.analysis()
 
     def getAllData(self):
@@ -40,6 +41,55 @@ class TrackAnalysis:
                 data.append(featuresOfPerson)
             self.__data.append(data)
 
+            self.writeAllDataInCsv("all_features.csv")
+
+    def writeAllDataInCsv(self, path):
+        with open(self.__filePath + path, "w") as file:
+
+            fileWriter = csv.writer(file)
+            fileWriter.writerow(self.__featureHeader)
+
+            for firstRow in self.__data:
+                for secondRow in firstRow:
+                    for thirdRow in secondRow:
+                        fileWriter.writerow(thirdRow)
+
+    def analysis(self):
+
+        data = pd.read_csv(self.__filePath + "all_features.csv")
+
+        from sklearn.model_selection import train_test_split
+        training_set, test_set = train_test_split(data, test_size=0.5, random_state=1)
+
+        X_train = training_set.iloc[:, 1:].values
+        Y_train = training_set.iloc[:, 0].values
+        X_test = test_set.iloc[:, 1:].values
+        Y_test = test_set.iloc[:, 0].values
+
+        from sklearn.svm import SVC
+        classifier = SVC(kernel='linear', random_state=1)
+        classifier.fit(X_train, Y_train)
+
+        Y_pred = classifier.predict(X_test)
+
+        from sklearn.metrics import confusion_matrix
+        cm = confusion_matrix(Y_test, Y_pred)
+        tn, fp, fn, tp = cm.ravel()
+
+        print("Confusion Matrix : ")
+        print(cm)
+
+        print("\nConfusion Matrix Values : ")
+        print("TP : " + str(tp) + "\t\tFP : " + str(fp))
+        print("FN : " + str(fn) + "\t\tTN : " + str(tn))
+
+        print("\nAccuracy Evaluation : ")
+        print("(TP + TN) / (TP + TN + FP + FN) = ", end="")
+        print((tp + tn) / (tp + tn + fp + fn))
+
+        print("\nClassification Report : ")
+        print(classification_report(Y_test, Y_pred))
+
     def printData(self, trainOrTestData, trainOrTestStr):
         dirID = 1
         for dirTrainData in trainOrTestData:
@@ -55,39 +105,6 @@ class TrackAnalysis:
             dirID += 1
 
             print("***********************************************************")
-
-    def analysis(self):
-
-        data = []
-        for firstRow in self.__data:
-            for secondRow in firstRow:
-                for thirdRow in secondRow:
-                    print(thirdRow)
-                    data.append(thirdRow)
-        data = pd.DataFrame(data)
-        data.columns = self.__featureHeader
-
-        print(data.shape)
-        print(data)
-
-        X = data.drop('class', axis=1)
-        y = data['class']
-
-        from sklearn.model_selection import train_test_split
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.50)
-
-        from sklearn.svm import SVC
-        svclassifier = SVC(kernel='linear')
-        svclassifier.fit(X_train, y_train)
-
-        y_pred = svclassifier.predict(X_test)
-
-        from sklearn.metrics import classification_report, confusion_matrix
-        print(confusion_matrix(y_test, y_pred))
-        print(classification_report(y_test, y_pred))
-        from sklearn import metrics
-
-        print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
 
 
 if __name__ == '__main__':
