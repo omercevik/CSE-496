@@ -41,7 +41,7 @@ class DrawFeature:
 
             fig, axs = plt.subplots(3, 3)
 
-            bplot1 = axs[1, 0].boxplot([y1[0], y2[0]], notch=True,  # notch shape
+            bplot1 = axs[1, 0].boxplot([y1[0], y2[0]],
                                        vert=True,  # vertical box alignment
                                        patch_artist=True,  # fill with color
                                        labels=labels
@@ -49,7 +49,7 @@ class DrawFeature:
             axs[1, 0].set_title(x_labels[0])
             axs[1, 0].set_ylabel("Total Frames")
 
-            bplot2 = axs[0, 0].boxplot([y1[1], y2[1]], notch=True,  # notch shape
+            bplot2 = axs[0, 0].boxplot([y1[1], y2[1]],
                                        vert=True,  # vertical box alignment
                                        patch_artist=True,  # fill with color
                                        labels=labels
@@ -57,7 +57,7 @@ class DrawFeature:
             axs[0, 0].set_title(x_labels[1])
             axs[0, 0].set_ylabel("Total Eye Aspect Ratio in Blink")
 
-            bplot3 = axs[0, 1].boxplot([y1[2], y2[2]], notch=True,  # notch shape
+            bplot3 = axs[0, 1].boxplot([y1[2], y2[2]],
                                        vert=True,  # vertical box alignment
                                        patch_artist=True,  # fill with color
                                        labels=labels
@@ -65,7 +65,7 @@ class DrawFeature:
             axs[0, 1].set_title(x_labels[2])
             axs[0, 1].set_ylabel("Total Eye Aspect Ratio in Blink")
 
-            bplot4 = axs[0, 2].boxplot([y1[3], y2[3]], notch=True,  # notch shape
+            bplot4 = axs[0, 2].boxplot([y1[3], y2[3]],
                                        vert=True,  # vertical box alignment
                                        patch_artist=True,  # fill with color
                                        labels=labels
@@ -73,7 +73,7 @@ class DrawFeature:
             axs[0, 2].set_title(x_labels[3])
             axs[0, 2].set_ylabel("Total Eye Aspect Ratio in Blink")
 
-            bplot5 = axs[1, 1].boxplot([y1[4], y2[4]], notch=True,  # notch shape
+            bplot5 = axs[1, 1].boxplot([y1[4], y2[4]],
                                        vert=True,  # vertical box alignment
                                        patch_artist=True,  # fill with color
                                        labels=labels
@@ -81,7 +81,7 @@ class DrawFeature:
             axs[1, 1].set_title(x_labels[4])
             axs[1, 1].set_ylabel("Second")
 
-            bplot6 = axs[1, 2].boxplot([y1[5], y2[5]], notch=True,  # notch shape
+            bplot6 = axs[1, 2].boxplot([y1[5], y2[5]],
                                        vert=True,  # vertical box alignment
                                        patch_artist=True,  # fill with color
                                        labels=labels
@@ -89,7 +89,7 @@ class DrawFeature:
             axs[1, 2].set_title(x_labels[5])
             axs[1, 2].set_ylabel("Second")
 
-            bplot7 = axs[2, 0].boxplot([y1[6], y2[6]], notch=True,  # notch shape
+            bplot7 = axs[2, 0].boxplot([y1[6], y2[6]],
                                        vert=True,  # vertical box alignment
                                        patch_artist=True,  # fill with color
                                        labels=labels
@@ -97,7 +97,7 @@ class DrawFeature:
             axs[2, 0].set_title(x_labels[6])
             axs[2, 0].set_ylabel("Second")
 
-            bplot8 = axs[2, 1].boxplot([y1[7], y2[7]], notch=True,  # notch shape
+            bplot8 = axs[2, 1].boxplot([y1[7], y2[7]],
                                        vert=True,  # vertical box alignment
                                        patch_artist=True,  # fill with color
                                        labels=labels
@@ -105,7 +105,7 @@ class DrawFeature:
             axs[2, 1].set_title(x_labels[7])
             axs[2, 1].set_ylabel("Second")
 
-            bplot9 = axs[2, 2].boxplot([y1[8], y2[8]], notch=True,  # notch shape
+            bplot9 = axs[2, 2].boxplot([y1[8], y2[8]],
                                        vert=True,  # vertical box alignment
                                        patch_artist=True,  # fill with color
                                        labels=labels
