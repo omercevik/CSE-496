@@ -12,7 +12,7 @@ class TrackAnalysis:
         self.__filePath = "/home/omer/Desktop/driver_eye_tracking/gtu/cse496/features/"
         self.__directorySize = 13
         self.__sleepSituationSize = 3
-        # self.getAllData()
+        self.getAllData()
         self.analysis()
 
     def getAllData(self):
