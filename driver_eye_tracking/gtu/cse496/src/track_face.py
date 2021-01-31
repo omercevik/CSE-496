@@ -5,7 +5,6 @@ import csv
 from threading import Thread, Lock
 from imutils import face_utils
 from scipy.spatial import distance as dist
-
 from gtu.cse496.src.track_analysis import TrackAnalysis
 from gtu.cse496.src.track_chart import TrackChart
 from gtu.cse496.src.track_face_ui import TrackFaceUI
@@ -92,6 +91,9 @@ class TrackFace:
 
         # For 10 minutes it will read video file.
         # finishTrackingTime = time.time() + 700
+        one_minute_counter = 0
+        one_minute_flag = True
+        one_minute_features = []
 
         # Starting to tracking.
         while True:
@@ -124,7 +126,8 @@ class TrackFace:
                     self.isUnderEyeThreshold(ear)
 
                     time_dist = time.time() - self.__featureTimer
-                    if time_dist >= 60:
+
+                    if time_dist >= 10:
 
                         if len(self.__underThresholdFrameCounts) == 0:
                             self.__underThresholdFrameCounts.append(0)
@@ -134,19 +137,6 @@ class TrackFace:
                             self.__underThresholdFirstPeriodTimes.append(0)
                         if len(self.__underThresholdSecondPeriodTimes) == 0:
                             self.__underThresholdSecondPeriodTimes.append(0)
-
-                        # self.__featuresFrameCounts.append(sum(self.__underThresholdFrameCounts))
-                        #
-                        # self.__featuresAreaMin.append(min(self.__underThresholdAreas))
-                        # self.__featuresAreaAvg.append(sum(self.__underThresholdAreas) / len(self.__underThresholdAreas))
-                        # self.__featuresAreaMax.append(max(self.__underThresholdAreas))
-                        #
-                        # self.__featuresBegToMinAvg.append(sum(self.__underThresholdFirstPeriodTimes) / len(self.__underThresholdFirstPeriodTimes))
-                        # self.__featuresBegToMinMax.append(max(self.__underThresholdFirstPeriodTimes))
-                        #
-                        # self.__featuresMinToEndMin.append(min(self.__underThresholdSecondPeriodTimes))
-                        # self.__featuresMinToEndAvg.append(sum(self.__underThresholdSecondPeriodTimes) / len(self.__underThresholdSecondPeriodTimes))
-                        # self.__featuresMinToEndMax.append(max(self.__underThresholdSecondPeriodTimes))
 
                         self.__featuresFrameCounts = (sum(self.__underThresholdFrameCounts))
 
@@ -163,9 +153,24 @@ class TrackFace:
                             self.__underThresholdSecondPeriodTimes))
                         self.__featuresMinToEndMax = (max(self.__underThresholdSecondPeriodTimes))
 
-                        self.parseMyFeatures()
+                        one_minute_features.append([self.__featuresFrameCounts,
+                                                    self.__featuresAreaMin,
+                                                    self.__featuresAreaAvg,
+                                                    self.__featuresAreaMax,
+                                                    self.__featuresBegToMinAvg,
+                                                    self.__featuresBegToMinMax,
+                                                    self.__featuresMinToEndMin,
+                                                    self.__featuresMinToEndAvg,
+                                                    self.__featuresMinToEndMax])
 
-                        self.__sleep_status = self.__analyzer.analysis(self.__myFeatures)
+                        if one_minute_counter == 5 and one_minute_flag:
+                            self.__sleep_status = self.__analyzer.analysis(
+                                [float(sum(col) / len(col)) for col in zip(*one_minute_features)])
+                            one_minute_flag = False
+                        elif one_minute_counter > 5:
+                            one_minute_features.pop(0)
+                            self.__sleep_status = self.__analyzer.analysis(
+                                [float(sum(col) / len(col)) for col in zip(*one_minute_features)])
 
                         self.__underThreshold = []
                         self.__underThresholdFrameCounts = []
@@ -173,6 +178,7 @@ class TrackFace:
                         self.__underThresholdFirstPeriodTimes = []
                         self.__underThresholdSecondPeriodTimes = []
                         self.__featureTimer = time.time()
+                        one_minute_counter += 1
 
                     self.__ui.printSleepStatus(frame, self.__sleep_status)
 
@@ -357,3 +363,6 @@ class TrackFace:
                              "{:.3f}".format(self.__featuresMinToEndMin),
                              "{:.3f}".format(self.__featuresMinToEndAvg),
                              "{:.3f}".format(self.__featuresMinToEndMax)]
+
+    def mean(self, a):
+        return sum(a) / len(a)
