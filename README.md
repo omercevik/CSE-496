@@ -2,21 +2,24 @@
 # Computer Engineering
 # CSE-496 Graduation Project II
 
-####### Ubuntu 20.04.1 LTS
-####### PyCharm Professional Edition
 
-###### Program Libraries
-###### ------------------
-###### Python 3.8
-###### OpenCV 2 4.5
-###### DLIB 19.21
-###### imutils 0.5.4
-###### scipy 1.6
-###### pandas 1.2.1
-###### scikit-learn 0.24
-###### matplotlib 3.3.4
+ **"Driver Awareness System Project"**
 
-###### **"Driver Awareness System Project"**
+      Ubuntu 20.04.1 LTS
+      PyCharm Professional Edition
+ 
+ 
+      Program Libraries
+      ------------------
+      Python 3.8
+      OpenCV 2 4.5
+      DLIB 19.21
+      imutils 0.5.4
+      scipy 1.6
+      pandas 1.2.1
+      scikit-learn 0.24
+      matplotlib 3.3.4
+
 
 Before run the program be sure that libraries are installed:
 
