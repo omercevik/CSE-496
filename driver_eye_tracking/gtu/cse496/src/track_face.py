@@ -6,6 +6,7 @@ from threading import Thread, Lock
 from imutils import face_utils
 from scipy.spatial import distance as dist
 
+from gtu.cse496.src.track_analysis import TrackAnalysis
 from gtu.cse496.src.track_chart import TrackChart
 from gtu.cse496.src.track_face_ui import TrackFaceUI
 
@@ -22,15 +23,20 @@ class TrackFace:
                                  "beg_to_min_avg", "beg_to_min_max",
                                  "min_to_end_min", "min_to_end_avg", "min_to_end_max"]
 
-        for i in range(1, 13):
+        self.__myFeatures = []
+
+        self.__analyzer = TrackAnalysis()
+
+        for i in range(1, 2):
             video = 0
-            for j in range(3):
+            for j in range(1, 2):
                 self.__ui = TrackFaceUI()
                 self.__chart = TrackChart()
                 self.__video = str(video)
                 video += 5
                 self.__video_dir = str(i)
-                self.__video_file = "dataset/videos/" + self.__video_dir + "/" + self.__video + ".mp4"
+                # self.__video_file = "dataset/videos/" + self.__video_dir + "/" + self.__video + ".mp4"
+                self.__video_file = 0
                 self.__file = ""
                 self.__fileWriter = ""
 
@@ -67,6 +73,7 @@ class TrackFace:
 
                 self.__allEyeRatios = []
                 self.__canCountBlink = False
+                self.__sleep_status = 'NONE'
 
                 self.scanFaceMutex = Lock()
 
@@ -84,10 +91,10 @@ class TrackFace:
         predictor = dlib.shape_predictor(self.__face_landmarks)
 
         # For 10 minutes it will read video file.
-        finishTrackingTime = time.time() + 700
+        # finishTrackingTime = time.time() + 700
 
         # Starting to tracking.
-        while time.time() < finishTrackingTime:
+        while True:
             faces, frame, gray = self.read_and_detect_face(cap, detector)
 
             # Is exit keys?
@@ -117,7 +124,6 @@ class TrackFace:
                     self.isUnderEyeThreshold(ear)
 
                     time_dist = time.time() - self.__featureTimer
-                    print("ZAMAN FARKI : " + str(time_dist))
                     if time_dist >= 60:
 
                         if len(self.__underThresholdFrameCounts) == 0:
@@ -129,18 +135,37 @@ class TrackFace:
                         if len(self.__underThresholdSecondPeriodTimes) == 0:
                             self.__underThresholdSecondPeriodTimes.append(0)
 
-                        self.__featuresFrameCounts.append(sum(self.__underThresholdFrameCounts))
+                        # self.__featuresFrameCounts.append(sum(self.__underThresholdFrameCounts))
+                        #
+                        # self.__featuresAreaMin.append(min(self.__underThresholdAreas))
+                        # self.__featuresAreaAvg.append(sum(self.__underThresholdAreas) / len(self.__underThresholdAreas))
+                        # self.__featuresAreaMax.append(max(self.__underThresholdAreas))
+                        #
+                        # self.__featuresBegToMinAvg.append(sum(self.__underThresholdFirstPeriodTimes) / len(self.__underThresholdFirstPeriodTimes))
+                        # self.__featuresBegToMinMax.append(max(self.__underThresholdFirstPeriodTimes))
+                        #
+                        # self.__featuresMinToEndMin.append(min(self.__underThresholdSecondPeriodTimes))
+                        # self.__featuresMinToEndAvg.append(sum(self.__underThresholdSecondPeriodTimes) / len(self.__underThresholdSecondPeriodTimes))
+                        # self.__featuresMinToEndMax.append(max(self.__underThresholdSecondPeriodTimes))
 
-                        self.__featuresAreaMin.append(min(self.__underThresholdAreas))
-                        self.__featuresAreaAvg.append(sum(self.__underThresholdAreas) / len(self.__underThresholdAreas))
-                        self.__featuresAreaMax.append(max(self.__underThresholdAreas))
+                        self.__featuresFrameCounts = (sum(self.__underThresholdFrameCounts))
 
-                        self.__featuresBegToMinAvg.append(sum(self.__underThresholdFirstPeriodTimes) / len(self.__underThresholdFirstPeriodTimes))
-                        self.__featuresBegToMinMax.append(max(self.__underThresholdFirstPeriodTimes))
+                        self.__featuresAreaMin = (min(self.__underThresholdAreas))
+                        self.__featuresAreaAvg = (sum(self.__underThresholdAreas) / len(self.__underThresholdAreas))
+                        self.__featuresAreaMax = (max(self.__underThresholdAreas))
 
-                        self.__featuresMinToEndMin.append(min(self.__underThresholdSecondPeriodTimes))
-                        self.__featuresMinToEndAvg.append(sum(self.__underThresholdSecondPeriodTimes) / len(self.__underThresholdSecondPeriodTimes))
-                        self.__featuresMinToEndMax.append(max(self.__underThresholdSecondPeriodTimes))
+                        self.__featuresBegToMinAvg = (sum(self.__underThresholdFirstPeriodTimes) / len(
+                            self.__underThresholdFirstPeriodTimes))
+                        self.__featuresBegToMinMax = (max(self.__underThresholdFirstPeriodTimes))
+
+                        self.__featuresMinToEndMin = (min(self.__underThresholdSecondPeriodTimes))
+                        self.__featuresMinToEndAvg = (sum(self.__underThresholdSecondPeriodTimes) / len(
+                            self.__underThresholdSecondPeriodTimes))
+                        self.__featuresMinToEndMax = (max(self.__underThresholdSecondPeriodTimes))
+
+                        self.parseMyFeatures()
+
+                        self.__sleep_status = self.__analyzer.analysis(self.__myFeatures)
 
                         self.__underThreshold = []
                         self.__underThresholdFrameCounts = []
@@ -148,6 +173,9 @@ class TrackFace:
                         self.__underThresholdFirstPeriodTimes = []
                         self.__underThresholdSecondPeriodTimes = []
                         self.__featureTimer = time.time()
+
+                    self.__ui.printSleepStatus(frame, self.__sleep_status)
+
                 else:
                     # Inserting the eye ratios in 60 seconds.
                     self.insertEyeRatiosInSecond(ear)
@@ -161,7 +189,7 @@ class TrackFace:
         self.__ui.con_thread = False
 
         # Write features to csv file.
-        self.writeToCsv()
+        # self.writeToCsv()
 
         # After execution release cap and destroy windows.
         cap.release()
@@ -195,7 +223,7 @@ class TrackFace:
 
         if self.__ui.con_thread:
             self.scanFaceMutex.acquire()
-            newThresh = sum(self.__allEyeRatios)/len(self.__allEyeRatios) - 0.04
+            newThresh = sum(self.__allEyeRatios) / len(self.__allEyeRatios) - 0.04
             self.scanFaceMutex.release()
 
             self.__eye_threshold = newThresh
@@ -318,3 +346,14 @@ class TrackFace:
                                             "{:.3f}".format(self.__featuresMinToEndMin[i]),
                                             "{:.3f}".format(self.__featuresMinToEndAvg[i]),
                                             "{:.3f}".format(self.__featuresMinToEndMax[i])])
+
+    def parseMyFeatures(self):
+        self.__myFeatures = ["{:d}".format(self.__featuresFrameCounts),
+                             "{:.3f}".format(self.__featuresAreaMin),
+                             "{:.3f}".format(self.__featuresAreaAvg),
+                             "{:.3f}".format(self.__featuresAreaMax),
+                             "{:.3f}".format(self.__featuresBegToMinAvg),
+                             "{:.3f}".format(self.__featuresBegToMinMax),
+                             "{:.3f}".format(self.__featuresMinToEndMin),
+                             "{:.3f}".format(self.__featuresMinToEndAvg),
+                             "{:.3f}".format(self.__featuresMinToEndMax)]

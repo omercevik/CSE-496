@@ -2,25 +2,53 @@
 # Computer Engineering
 # CSE-496 Graduation Project II
 
-Working Operating System:
+####### Ubuntu 20.04.1 LTS
+####### PyCharm Professional Edition
 
-    Ubuntu 20.04.1
-    PyCharm IDE Professional
-    
-    "Driver Awareness System Project"
-    
-1. Python 3
-2. OpenCV
-3. DLIB
-4. Pandas
-5. Matplotlib
-6. Time
-7. Threading
-8. University of Texas at Arlington Video Data Set
-         
-       http://vlm1.uta.edu/~athitsos/projects/drowsiness/
+###### Program Libraries
+###### ------------------
+###### Python 3.8
+###### OpenCV 2 4.5
+###### DLIB 19.21
+###### imutils 0.5.4
+###### scipy 1.6
+###### pandas 1.2.1
+###### scikit-learn 0.24
+###### matplotlib 3.3.4
+
+###### **"Driver Awareness System Project"**
+
+Before run the program be sure that libraries are installed:
+
+1. OpenCV ->
+   To install on Terminal: 
+   **sudo pip3 install opencv-python**
+   
+2. DLIB -> 
+   To install on Terminal: 
+   **sudo pip3 install dlib**
+   
+3. imutils -> 
+   To install on Terminal: 
+   **sudo pip3 install imutils**
+
+4. scipy -> 
+   To install on Terminal: 
+   **sudo pip3 install scipy**
+
+5. pandas -> 
+   To install on Terminal: 
+   **sudo pip3 install pandas**
+   
+6. scikit-learn -> 
+   To install on Terminal: 
+   **sudo pip3 install scikit-learn**
+   
+7. matplotlib -> 
+   To install on Terminal: 
+   **sudo pip3 install matplotlib**
 
 
-YouTube Link:
+**You can close the application after run using 'ENTER' key**
 
-        https://youtu.be/H0aboTpz6y0
+# **! NOTE : To run the program on PyCharm IDE start to run __init__.py !**
