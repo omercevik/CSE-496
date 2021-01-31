@@ -1,5 +1,6 @@
 import csv
 import pandas as pd
+import os
 from sklearn.metrics import classification_report
 
 
@@ -9,7 +10,7 @@ class TrackAnalysis:
         warnings.filterwarnings('ignore')
         self.__featureHeader = []
         self.__data = []
-        self.__filePath = "/home/omer/Desktop/driver_eye_tracking/gtu/cse496/features/"
+        self.__filePath = os.path.dirname(os.path.abspath(__file__)) + "/../features/"
         self.__directorySize = 13
         self.__sleepSituationSize = 3
         self.getAllData()
