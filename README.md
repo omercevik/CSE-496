@@ -23,33 +23,40 @@
 
 Before run the program be sure that libraries are installed:
 
-1. OpenCV ->
-   To install on Terminal: 
-   **sudo pip3 install opencv-python**
+1. OpenCV
    
-2. DLIB -> 
-   To install on Terminal: 
-   **sudo pip3 install dlib**
+         To install on Terminal: 
+         sudo pip3 install opencv-python
    
-3. imutils -> 
-   To install on Terminal: 
-   **sudo pip3 install imutils**
+2. DLIB
+   
+         To install on Terminal: 
+         sudo pip3 install dlib
+   
+3. imutils
+   
+         To install on Terminal: 
+         sudo pip3 install imutils
 
-4. scipy -> 
-   To install on Terminal: 
-   **sudo pip3 install scipy**
+4. scipy
+   
+         To install on Terminal: 
+         sudo pip3 install scipy
 
-5. pandas -> 
-   To install on Terminal: 
-   **sudo pip3 install pandas**
+5. pandas
    
-6. scikit-learn -> 
-   To install on Terminal: 
-   **sudo pip3 install scikit-learn**
+         To install on Terminal: 
+         sudo pip3 install pandas
    
-7. matplotlib -> 
-   To install on Terminal: 
-   **sudo pip3 install matplotlib**
+6. scikit-learn
+   
+         To install on Terminal: 
+         sudo pip3 install scikit-learn
+   
+7. matplotlib
+   
+         To install on Terminal: 
+         sudo pip3 install matplotlib
 
 
 **You can close the application after run using 'ENTER' key**
